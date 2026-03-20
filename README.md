@@ -1,1 +1,331 @@
 <img width="1440" height="2530" alt="image" src="https://github.com/user-attachments/assets/d87e8ec7-5288-4b6d-a3f6-35cb95b9c55a" />
+[ai_video_upscaler_ui_redesign.html](https://github.com/user-attachments/files/26152432/ai_video_upscaler_ui_redesign.html)
+<div style="padding: 2rem 0; background: transparent;">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; }
+    
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1rem; }
+    
+    .header { text-align: center; margin-bottom: 3rem; }
+    .header h1 { font-size: 28px; font-weight: 500; margin: 0 0 0.5rem; color: var(--color-text-primary); }
+    .header p { font-size: 14px; color: var(--color-text-secondary); margin: 0; }
+    
+    .upload-zone {
+      border: 2px dashed var(--color-border-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--color-background-secondary);
+    }
+    
+    .upload-zone:hover {
+      border-color: var(--color-border-primary);
+      background: var(--color-background-tertiary);
+    }
+    
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 1rem;
+      display: block;
+      opacity: 0.6;
+    }
+    
+    .upload-text h3 { font-size: 16px; font-weight: 500; margin: 0 0 0.25rem; color: var(--color-text-primary); }
+    .upload-text p { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+    
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .setting-card {
+      background: var(--color-background-primary);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-md);
+      padding: 1rem;
+    }
+    
+    .setting-label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; display: block; }
+    
+    .option-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    
+    .option-btn {
+      flex: 1;
+      min-width: 60px;
+      padding: 0.5rem;
+      border: 0.5px solid var(--color-border-tertiary);
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+    
+    .option-btn:hover {
+      border-color: var(--color-border-secondary);
+      background: var(--color-background-secondary);
+    }
+    
+    .option-btn.active {
+      background: var(--color-background-info);
+      color: var(--color-text-info);
+      border-color: var(--color-border-info);
+      font-weight: 500;
+    }
+    
+    .action-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--color-border-secondary);
+      background: var(--color-background-primary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn:hover {
+      border-color: var(--color-border-primary);
+      background: var(--color-background-secondary);
+    }
+    
+    .btn.primary {
+      background: var(--color-background-info);
+      color: var(--color-text-info);
+      border-color: var(--color-border-info);
+    }
+    
+    .btn.primary:hover {
+      opacity: 0.9;
+    }
+    
+    .progress-container { margin: 2rem 0; }
+    
+    .progress-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-md);
+      margin-bottom: 0.75rem;
+    }
+    
+    .progress-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--color-background-info);
+      color: var(--color-text-info);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    
+    .progress-text h4 { margin: 0 0 0.25rem; font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+    .progress-text p { margin: 0; font-size: 12px; color: var(--color-text-secondary); }
+    
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: var(--color-background-tertiary);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--color-background-info);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    
+    .comparison-section {
+      margin: 2rem 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    
+    .comparison-box {
+      border-radius: var(--border-radius-lg);
+      border: 0.5px solid var(--color-border-tertiary);
+      overflow: hidden;
+      background: var(--color-background-secondary);
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+    }
+    
+    .comparison-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--color-background-primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--border-radius-md);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      border: 0.5px solid var(--color-border-tertiary);
+    }
+    
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    
+    .stat-box {
+      background: var(--color-background-secondary);
+      padding: 1rem;
+      border-radius: var(--border-radius-md);
+      text-align: center;
+    }
+    
+    .stat-value { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin: 0.5rem 0; }
+    .stat-label { font-size: 12px; color: var(--color-text-secondary); margin: 0; }
+    
+    @media (max-width: 640px) {
+      .comparison-section { grid-template-columns: 1fr; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .header h1 { font-size: 24px; }
+    }
+  </style>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>AI Video Upscaler</h1>
+      <p>Enhance your videos with intelligent upscaling • Fast • Free • No signup</p>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="upload-zone" onclick="alert('File picker would open here')">
+      <span class="upload-icon">📹</span>
+      <div class="upload-text">
+        <h3>Drop your video or image here</h3>
+        <p>Or click to browse • MP4, WebM, PNG, JPEG • Up to 4GB</p>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="settings-grid">
+      <div class="setting-card">
+        <label class="setting-label">Upscaling model</label>
+        <div class="option-group">
+          <button class="option-btn active">Anime4K</button>
+          <button class="option-btn">RealESRGAN</button>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <label class="setting-label">Quality</label>
+        <div class="option-group">
+          <button class="option-btn">Small</button>
+          <button class="option-btn active">Medium</button>
+          <button class="option-btn">Large</button>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <label class="setting-label">Processing</label>
+        <div class="option-group">
+          <button class="option-btn active">WebGPU</button>
+          <button class="option-btn">WebGL</button>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <label class="setting-label">Output format</label>
+        <div class="option-group">
+          <button class="option-btn active">MP4</button>
+          <button class="option-btn">WebM</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-group">
+      <button class="btn">Choose file</button>
+      <button class="btn primary">Start upscaling</button>
+    </div>
+
+    <!-- Processing State (example) -->
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 0.5px solid var(--color-border-tertiary);">
+      <h2 style="font-size: 16px; font-weight: 500; margin-top: 0;">Processing: sample_video.mp4</h2>
+      
+      <div class="progress-container">
+        <div class="progress-item">
+          <div class="progress-icon">✓</div>
+          <div class="progress-text" style="flex: 1;">
+            <h4>File loaded</h4>
+            <p>1920×1080 • 45 seconds • MP4</p>
+          </div>
+        </div>
+
+        <div class="progress-item">
+          <div class="progress-icon" style="background: var(--color-background-warning); color: var(--color-text-warning);">⚙</div>
+          <div style="flex: 1;">
+            <div class="progress-text">
+              <h4>Upscaling in progress</h4>
+              <p>Frame 340 of 1350 • 25% complete</p>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 25%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-item" style="opacity: 0.5;">
+          <div class="progress-icon" style="background: var(--color-background-tertiary); color: var(--color-text-secondary);">💾</div>
+          <div class="progress-text">
+            <h4>Saving output</h4>
+            <p>Estimated time: 8 minutes</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <p class="stat-label">Original</p>
+          <p class="stat-value">1080p</p>
+        </div>
+        <div class="stat-box">
+          <p class="stat-label">Upscaled</p>
+          <p class="stat-value">4K</p>
+        </div>
+        <div class="stat-box">
+          <p class="stat-label">Processing</p>
+          <p class="stat-value">25%</p>
+        </div>
+        <div class="stat-box">
+          <p class="stat-label">Time left</p>
+          <p class="stat-value">8m</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
